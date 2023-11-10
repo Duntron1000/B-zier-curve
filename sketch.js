@@ -1,33 +1,33 @@
-let layers = [[], [], [], []];
+let layers = [[]];
 let bs = [];
 let px = [];
 let py = [];
-let controlNodes = [];
-let derivedNodes = [];
-let thirdNodes = [];
+
 let t = 0;
 let back = false;
 let c;
-bs.push(new besier(layers[0]));
-bs.push(new besier(layers[1]));
-bs.push(new besier(layers[2]));
-bs.push(new besier(layers[3]));
 
 function setup() {
   c = color(random(255), random(255), random(255));
 
-  createCanvas(400, 400);
-  layers[0].push(new dot(random(100), random(400), 10));
-  layers[0].push(new dot(random(100, 200), random(400), 10));
-  layers[0].push(new dot(random(200, 300), random(400), 10));
-  layers[0].push(new dot(random(300, 400), random(400), 10));
-  for (let i = 0; i <= 2; i++) {
-    layers[1].push(new dot(0, 0, 15));
+  createCanvas(1000, 1000);
+  for (let i = 0; i < 100; i++) {
+    layers[0].push(new dot(random(1000), random(1000), 5));
   }
-  for (let i = 0; i <= 1; i++) {
-    layers[2].push(new dot(0, 0, 15));
+
+  cursor = 0;
+  for (let j = layers[0].length - 1; j >= 1; j--) {
+    temp = [];
+    for (let i = 0; i <= j - 1; i++) {
+      temp.push(new dot(0, 0, 10));
+      print(i);
+    }
+    layers.push(temp);
   }
-  layers[3].push(new dot(0, 0, 15));
+
+  for (let i = 0; i < layers.length; i++) {
+    bs.push(new besier(layers[i]));
+  }
 }
 
 function draw() {
@@ -36,30 +36,18 @@ function draw() {
     c.disp();
   }
 
-  for (let i = 0; i < layers[0].length - 1; i++) {
-    layers[1][i].updatePos(
-      lerp(layers[0][i].x, layers[0][i + 1].x, t),
-      lerp(layers[0][i].y, layers[0][i + 1].y, t)
-    );
+  //update all positons
+  for (let j = 1; j < layers.length; j++) {
+    for (let i = 0; i < layers[j].length; i++) {
+      layers[j][i].updatePos(
+        lerp(layers[j - 1][i].x, layers[j - 1][i + 1].x, t),
+        lerp(layers[j - 1][i].y, layers[j - 1][i + 1].y, t)
+      );
+    }
   }
 
-  layers[2][0].updatePos(
-    lerp(layers[1][0].x, layers[1][1].x, t),
-    lerp(layers[1][0].y, layers[1][1].y, t)
-  );
-
-  layers[2][1].updatePos(
-    lerp(layers[1][1].x, layers[1][2].x, t),
-    lerp(layers[1][1].y, layers[1][2].y, t)
-  );
-
-  px.push(lerp(layers[2][0].x, layers[2][1].x, t));
-  py.push(lerp(layers[2][0].y, layers[2][1].y, t));
-
-  layers[3][0].updatePos(
-    lerp(layers[2][0].x, layers[2][1].x, t),
-    lerp(layers[2][0].y, layers[2][1].y, t)
-  );
+  px.push(layers[layers.length - 1][0].x);
+  py.push(layers[layers.length - 1][0].y);
 
   stroke(c);
   fill(c);
@@ -82,8 +70,8 @@ function draw() {
     c = color(random(255), random(255), random(255));
   }
   if (back) {
-    t -= 0.005;
+    t -= 0.0001;
   } else {
-    t += 0.005;
+    t += 0.0001;
   }
 }
