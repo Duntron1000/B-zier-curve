@@ -17,10 +17,10 @@ function setup() {
   c = color(random(255), random(255), random(255));
 
   createCanvas(400, 400);
-  layers[0].push(new dot(50, 200, 10));
-  layers[0].push(new dot(200, 300, 10));
-  layers[0].push(new dot(330, 100, 10));
-  layers[0].push(new dot(350, 200, 10));
+  layers[0].push(new dot(random(100), random(400), 10));
+  layers[0].push(new dot(random(100, 200), random(400), 10));
+  layers[0].push(new dot(random(200, 300), random(400), 10));
+  layers[0].push(new dot(random(300, 400), random(400), 10));
   for (let i = 0; i <= 2; i++) {
     layers[1].push(new dot(0, 0, 15));
   }
@@ -82,8 +82,8 @@ function draw() {
     c = color(random(255), random(255), random(255));
   }
   if (back) {
-    t -= 0.003;
+    t -= 0.005;
   } else {
-    t += 0.003;
+    t += 0.005;
   }
 }
