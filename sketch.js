@@ -6,15 +6,29 @@ let py = [];
 let t = 0;
 let back = false;
 let c;
+let slider;
+let speed;
+let lastVal = 4;
+let step = .005
 
 function setup() {
   c = color(random(255), random(255), random(255));
 
   createCanvas(1000, 1000);
-  slider = createSlider(0, 100);
-  slider.positio(10, 10);
-  slider.size(80);
-  for (let i = 0; i < 100; i++) {
+  slider = createSlider(2, 100, 4, 1);
+  slider.size(1000);
+  speed = createSlider(0, .01, .0005, 0.0001);
+  speed.size(1000)
+  newCurve();
+}
+
+function newCurve(){
+  layers = [[]];
+  bs = [];
+  px = [];
+  py = [];
+  
+  for (let i = 0; i < lastVal; i++) {
     layers[0].push(new dot(random(1000), random(1000), 5));
   }
 
@@ -34,6 +48,14 @@ function setup() {
 }
 
 function draw() {
+  let points = slider.value()
+  if (points != lastVal){
+    lastVal = points;
+    newCurve();
+  }
+  if (speed.value() != step){
+    step = speed.value();
+  }
   background(220);
   for (const c of bs) {
     c.disp();
@@ -54,11 +76,16 @@ function draw() {
 
   stroke(c);
   fill(c);
+  noFill();
+  strokeWeight(5);
+  beginShape();
   for (let i = 0; i < px.length; i++) {
-    ellipse(px[i], py[i], 5, 5);
+    curveVertex(px[i], py[i]);
   }
+  endShape();
   stroke(0);
   fill(0);
+  strokeWeight(1);
 
   if (t >= 1) {
     back = true;
@@ -73,8 +100,8 @@ function draw() {
     c = color(random(255), random(255), random(255));
   }
   if (back) {
-    t -= 0.0001;
+    t -= step;
   } else {
-    t += 0.0001;
+    t += step;
   }
 }
