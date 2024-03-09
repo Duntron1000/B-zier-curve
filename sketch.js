@@ -11,6 +11,9 @@ function setup() {
   c = color(random(255), random(255), random(255));
 
   createCanvas(1000, 1000);
+  slider = createSlider(0, 100);
+  slider.positio(10, 10);
+  slider.size(80);
   for (let i = 0; i < 100; i++) {
     layers[0].push(new dot(random(1000), random(1000), 5));
   }
